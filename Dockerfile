@@ -1,13 +1,12 @@
-# syntax=docker/dockerfile:1
+FROM maven:3.8.3 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
-FROM eclipse-temurin:17-jdk-jammy
 
-WORKDIR /app
+FROM openjdk:17-jdk-slim
+EXPOSE 8080
+COPY --from=build /home/app/target/database-0.0.1-SNAPSHOT.jar /usr/local/lib/database.jar
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:resolve
 
-COPY src ./src
-RUN mvn clean install
-CMD ["./mvnw", "spring-boot:run"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/database.jar"]
