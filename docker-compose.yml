@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  # mysqldb:
+  #   container_name: mysqldb
+  #   image: mysql:latest
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=
+  #     - MYSQL_DATABASE=
+  #     - MYSQL_USER=
+  #     - MYSQL_PASSWORD=
+  #   restart: always
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - mysqldb:/var/lib/mysql
+  app.test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: database-1.0.0/app
+    # restart: always
+    # depends_on:
+    #   - mysqldb
+    ports:
+      - 8080:8080
+    volumes:
+      - ".:/app"
+
+# volumes:
+#   mysqldb:
